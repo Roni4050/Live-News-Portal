@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="Live News Portal - Breaking news from Google News. Real-time updates 24/7 with 1000+ articles.">
+<meta name="keywords" content="breaking news, live news, google news, world news, us news, technology, business, sports">
+<title>Live News Portal | Breaking News 24/7</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f0f2f5;
+  color: #1a1a2e;
+  line-height: 1.5;
+}
+
+/* Header */
+.header {
+  background: #0a0f1c;
+  color: white;
+  padding: 15px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 28px;
+}
+
+.header p {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 5px;
+}
+
+/* Breaking Ticker */
+.ticker {
+  background: #0f172a;
+  color: white;
+  padding: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  border-bottom: 1px solid #1e293b;
+}
+
+.ticker span {
+  background: #dc2626;
+  padding: 4px 12px;
+  border-radius: 4px;
+  margin-right: 12px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.ticker-content {
+  display: inline-block;
+  white-space: nowrap;
+  animation: tickerScroll 30s linear infinite;
+}
+
+@keyframes tickerScroll {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Navigation */
+.nav {
+  background: #1e293b;
+  padding: 12px;
+  overflow-x: auto;
+  white-space: nowrap;
+  text-align: center;
+  position: sticky;
+  top: 73px;
+  z-index: 99;
+}
+
+.nav button {
+  background: transparent;
+  border: none;
+  color: #cbd5e1;
+  padding: 8px 18px;
+  margin: 0 3px;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 30px;
+  transition: all 0.3s;
+}
+
+.nav button:hover {
+  background: #334155;
+  color: white;
+}
+
+.nav button.active {
+  background: #f97316;
+  color: white;
+}
+
+/* Container */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Refresh Bar */
+.refresh-bar {
+  background: white;
+  border-radius: 60px;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.refresh-btn {
+  background: #1e293b;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 40px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.refresh-btn:hover {
+  background: #f97316;
+}
+
+.countdown {
+  background: #f1f5f9;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status {
+  background: #f1f5f9;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+}
+
+.live {
+  background: #dc2626;
+  color: white;
+}
+
+/* Two Column Layout */
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 32px;
+}
+
+@media (max-width: 992px) {
+  .two-column {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* News Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: all 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+}
+
+.card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background: #e2e8f0;
+}
+
+.card-content {
+  padding: 20px;
+}
+
+.card-cat {
+  color: #f97316;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.card-title a {
+  text-decoration: none;
+  color: #1e293b;
+}
+
+.card-title a:hover {
+  color: #f97316;
+}
+
+.card-desc {
+  font-size: 14px;
+  color: #475569;
+  margin-bottom: 16px;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.read-more {
+  color: #f97316;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.read-more:hover {
+  gap: 8px;
+}
+
+/* Sidebar */
+.sidebar {
+  display: block;
+}
+
+.widget {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.widget h3 {
+  font-size: 20px;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f97316;
+}
+
+.trending-list {
+  list-style: none;
+}
+
+.trending-list li {
+  padding: 12px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.trending-list li a {
+  text-decoration: none;
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.trending-list li a:hover {
+  color: #f97316;
+}
+
+.trending-num {
+  color: #f97316;
+  font-weight: 800;
+  margin-right: 10px;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 40px 0;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 8px 18px;
+  border-radius: 40px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.page-btn:hover {
+  background: #f97316;
+  color: white;
+  border-color: #f97316;
+}
+
+.page-btn.active {
+  background: #f97316;
+  color: white;
+  border-color: #f97316;
+}
+
+/* Loader */
+.loader {
+  text-align: center;
+  padding: 60px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e2e8f0;
+  border-top-color: #f97316;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 50px;
+  text-align: center;
+  border-radius: 20px;
+}
+
+/* Footer */
+.footer {
+  background: #0f172a;
+  color: #94a3b8;
+  text-align: center;
+  padding: 40px;
+  margin-top: 50px;
+  font-size: 13px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  .refresh-bar {
+    flex-direction: column;
+    align-items: center;
+  }
+  .nav button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Live News Portal</h1>
+  <p>Breaking News 24/7 | 1000+ Articles | Auto Refresh Every 3 Minutes</p>
+</div>
+
+<div class="ticker">
+  <span>BREAKING</span>
+  <div class="ticker-content" id="tickerText">Loading latest news...</div>
+</div>
+
+<div class="nav" id="navContainer">
+  <button class="nav-btn active" data-cat="all">Home</button>
+  <button class="nav-btn" data-cat="us">US News</button>
+  <button class="nav-btn" data-cat="world">World News</button>
+  <button class="nav-btn" data-cat="technology">Technology</button>
+  <button class="nav-btn" data-cat="business">Business</button>
+  <button class="nav-btn" data-cat="sports">Sports</button>
+  <button class="nav-btn" data-cat="health">Health</button>
+  <button class="nav-btn" data-cat="science">Science</button>
+  <button class="nav-btn" data-cat="entertainment">Entertainment</button>
+  <button class="nav-btn" data-cat="crypto">Crypto</button>
+  <button class="nav-btn" data-cat="ai">AI</button>
+</div>
+
+<div class="container">
+  <div class="refresh-bar">
+    <button class="refresh-btn" id="refreshBtn">Refresh News Now</button>
+    <div>
+      <span class="status" id="articleCount">0 articles</span>
+      <span class="status" id="lastUpdate">--:--:--</span>
+      <span class="status live" id="liveStatus">LIVE</span>
+    </div>
+    <div>
+      <span class="countdown" id="countdownTimer">Next update in 03:00</span>
+    </div>
+  </div>
+
+  <div class="two-column">
+    <div>
+      <div id="newsGrid" class="grid"><div class="loader"><div class="spinner"></div></div></div>
+      <div id="pagination" class="pagination"></div>
+    </div>
+
+    <div class="sidebar">
+      <div class="widget">
+        <h3>Trending Now</h3>
+        <ul class="trending-list" id="trendingList">
+          <li>Loading trending news...</li>
+        </ul>
+      </div>
+      <div class="widget">
+        <div style="font-size:11px;color:#94a3b8;text-align:center;margin-bottom:10px;">ADVERTISEMENT</div>
+        <div style="background:linear-gradient(135deg,#e2e8f0,#cbd5e1);height:280px;display:flex;align-items:center;justify-content:center;border-radius:16px;font-weight:600;color:#64748b;">300x250 AdSense Banner</div>
+      </div>
+      <div class="widget">
+        <h3>Daily Briefing</h3>
+        <p style="font-size:14px;margin-bottom:15px;">Get top stories in your inbox</p>
+        <input type="email" placeholder="Your email address" style="width:100%;padding:12px;border:1px solid #e2e8f0;border-radius:40px;margin-bottom:12px;">
+        <button style="background:#f97316;color:white;border:none;padding:12px;width:100%;border-radius:40px;font-weight:600;cursor:pointer;">Subscribe</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>© 2025 Live News Portal | Powered by Google News | 1000+ Articles | Auto Refresh Every 3 Minutes</p>
+</div>
+
+<script>
+// ==================== CONFIGURATION ====================
+var QUERIES = [
+  "breaking+news", "world+news", "us+news", "technology", "business", 
+  "sports", "health", "science", "entertainment", "politics",
+  "crypto", "bitcoin", "ai", "artificial+intelligence"
+];
+
+var allArticles = [];
+var currentCategory = "all";
+var currentPage = 1;
+var articlesPerPage = 15;
+var refreshInterval;
+var countdownSeconds = 180;
+
+// ==================== HELPER FUNCTIONS ====================
+function escapeHtml(str) {
+  if (!str) return "";
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
+
+function getCategory(title, desc) {
+  var text = (title + " " + (desc || "")).toLowerCase();
+  if (text.indexOf("crypto") !== -1 || text.indexOf("bitcoin") !== -1 || text.indexOf("ethereum") !== -1) return "crypto";
+  if (text.indexOf("ai") !== -1 || text.indexOf("artificial") !== -1) return "ai";
+  if (text.indexOf("us") !== -1 || text.indexOf("usa") !== -1 || text.indexOf("america") !== -1) return "us";
+  if (text.indexOf("world") !== -1 || text.indexOf("global") !== -1 || text.indexOf("international") !== -1) return "world";
+  if (text.indexOf("business") !== -1 || text.indexOf("stock") !== -1 || text.indexOf("economy") !== -1) return "business";
+  if (text.indexOf("tech") !== -1 || text.indexOf("technology") !== -1 || text.indexOf("software") !== -1) return "technology";
+  if (text.indexOf("sports") !== -1 || text.indexOf("football") !== -1 || text.indexOf("basketball") !== -1) return "sports";
+  if (text.indexOf("health") !== -1 || text.indexOf("medical") !== -1 || text.indexOf("covid") !== -1) return "health";
+  if (text.indexOf("science") !== -1 || text.indexOf("space") !== -1 || text.indexOf("nasa") !== -1) return "science";
+  if (text.indexOf("movie") !== -1 || text.indexOf("film") !== -1 || text.indexOf("celebrity") !== -1) return "entertainment";
+  return "general";
+}
+
+function getImageFromDesc(desc) {
+  if (!desc) return null;
+  var imgMatch = desc.match(/<img[^>]+src="([^">]+)"/);
+  if (imgMatch) return imgMatch[1];
+  var imgMatch2 = desc.match(/src='([^']+)'/);
+  if (imgMatch2) return imgMatch2[1];
+  return null;
+}
+
+// ==================== FETCH ARTICLES ====================
+async function fetchAllArticles() {
+  var allResults = [];
+  
+  for (var q = 0; q < QUERIES.length; q++) {
+    try {
+      var rssUrl = "https://news.google.com/rss/search?q=" + QUERIES[q] + "&hl=en-US&gl=US&ceid=US:en";
+      var apiUrl = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(rssUrl);
+      var response = await fetch(apiUrl + "&_t=" + Date.now() + "_" + q);
+      
+      if (response.ok) {
+        var data = await response.json();
+        if (data && data.items && data.items.length) {
+          allResults = allResults.concat(data.items);
+        }
+      }
+    } catch(e) {
+      console.log("Error fetching", QUERIES[q]);
+    }
+  }
+  
+  // Remove duplicates
+  var uniqueMap = new Map();
+  for (var i = 0; i < allResults.length; i++) {
+    var item = allResults[i];
+    if (!uniqueMap.has(item.link)) {
+      uniqueMap.set(item.link, item);
+    }
+  }
+  
+  var uniqueArticles = Array.from(uniqueMap.values());
+  console.log("Total unique articles:", uniqueArticles.length);
+  
+  // Process articles
+  var processed = [];
+  for (var i = 0; i < uniqueArticles.length; i++) {
+    var a = uniqueArticles[i];
+    var description = a.description || "";
+    var imgUrl = getImageFromDesc(description);
+    
+    if (!imgUrl) {
+      var titleText = a.title || "News";
+      imgUrl = "https://placehold.co/600x400/1e293b/white?text=" + encodeURIComponent(titleText.substring(0,20));
+    }
+    
+    processed.push({
+      title: a.title || "Breaking News",
+      desc: description.replace(/<[^>]*>/g, "").substring(0, 300) || "Latest breaking news update. Click to read full story.",
+      url: a.link || "#",
+      image: imgUrl,
+      category: getCategory(a.title, description),
+      pubDate: a.pubDate || new Date().toISOString()
+    });
+  }
+  
+  return processed;
+}
+
+// ==================== LOAD NEWS ====================
+async function loadNews() {
+  var grid = document.getElementById("newsGrid");
+  var status = document.getElementById("liveStatus");
+  var countSpan = document.getElementById("articleCount");
+  
+  if (grid) grid.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
+  if (status) status.innerHTML = "UPDATING";
+  
+  try {
+    var articles = await fetchAllArticles();
+    
+    if (!articles.length) throw new Error("No articles found");
+    
+    allArticles = articles;
+    
+    if (countSpan) countSpan.innerHTML = allArticles.length + " articles";
+    document.getElementById("lastUpdate").innerHTML = new Date().toLocaleTimeString();
+    if (status) status.innerHTML = "LIVE";
+    
+    updateTicker();
+    currentPage = 1;
+    renderNews();
+    
+    countdownSeconds = 180;
+    updateCountdownDisplay();
+  } catch(e) {
+    console.error("Error:", e);
+    if (status) status.innerHTML = "ERROR";
+    if (grid) grid.innerHTML = '<div class="error">Failed to load news.<br><br><button onclick="loadNews()" style="margin-top:15px;padding:10px 28px;background:#f97316;border:none;border-radius:40px;cursor:pointer;font-weight:600;">Retry Now</button></div>';
+  }
+}
+
+function updateTicker() {
+  var ticker = document.getElementById("tickerText");
+  if (ticker && allArticles.length > 0) {
+    var titles = [];
+    for (var i = 0; i < Math.min(12, allArticles.length); i++) {
+      titles.push(allArticles[i].title);
+    }
+    ticker.innerHTML = titles.join("  |  ");
+  }
+}
+
+// ==================== RENDER NEWS ====================
+function renderNews() {
+  if (!allArticles.length) return;
+  
+  var filtered = allArticles;
+  if (currentCategory !== "all") {
+    filtered = [];
+    for (var i = 0; i < allArticles.length; i++) {
+      if (allArticles[i].category === currentCategory) {
+        filtered.push(allArticles[i]);
+      }
+    }
+  }
+  
+  if (!filtered.length) {
+    document.getElementById("newsGrid").innerHTML = '<div class="error">No articles found in this category. Try another category.</div>';
+    document.getElementById("pagination").innerHTML = "";
+    return;
+  }
+  
+  var startIdx = (currentPage - 1) * articlesPerPage;
+  var paginated = filtered.slice(startIdx, startIdx + articlesPerPage);
+  var totalPages = Math.ceil(filtered.length / articlesPerPage);
+  
+  var html = "";
+  for (var i = 0; i < paginated.length; i++) {
+    var a = paginated[i];
+    html += '<div class="card">';
+    html += '<img class="card-img" src="' + a.image + '" loading="lazy" onerror="this.src=\'https://placehold.co/600x400/1e293b/white?text=News\'" alt="' + escapeHtml(a.title) + '">';
+    html += '<div class="card-content">';
+    html += '<span class="card-cat">' + escapeHtml(a.category.toUpperCase()) + '</span>';
+    html += '<h3 class="card-title"><a href="' + a.url + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(a.title) + '</a></h3>';
+    html += '<p class="card-desc">' + escapeHtml(a.desc.substring(0,120)) + '...</p>';
+    html += '<a href="' + a.url + '" target="_blank" class="read-more">Read full story →</a>';
+    html += '</div></div>';
+  }
+  document.getElementById("newsGrid").innerHTML = html;
+  
+  if (totalPages > 1) {
+    var pagHtml = '';
+    pagHtml += '<button class="page-btn" onclick="changePage(' + (currentPage-1) + ')" ' + (currentPage === 1 ? 'disabled style="opacity:0.5"' : '') + '>Previous</button>';
+    
+    var startPage = Math.max(1, currentPage - 2);
+    var endPage = Math.min(totalPages, startPage + 4);
+    
+    for (var i = startPage; i <= endPage; i++) {
+      pagHtml += '<button class="page-btn ' + (currentPage === i ? 'active' : '') + '" onclick="changePage(' + i + ')">' + i + '</button>';
+    }
+    pagHtml += '<button class="page-btn" onclick="changePage(' + (currentPage+1) + ')" ' + (currentPage === totalPages ? 'disabled style="opacity:0.5"' : '') + '>Next</button>';
+    document.getElementById("pagination").innerHTML = pagHtml;
+  } else {
+    document.getElementById("pagination").innerHTML = "";
+  }
+  
+  var trendingList = document.getElementById("trendingList");
+  if (trendingList && allArticles.length) {
+    var trendingHtml = "";
+    for (var i = 0; i < Math.min(8, allArticles.length); i++) {
+      trendingHtml += '<li><span class="trending-num">' + (i+1) + '.</span> <a href="' + allArticles[i].url + '" target="_blank">' + escapeHtml(allArticles[i].title.substring(0,70)) + '</a></li>';
+    }
+    trendingList.innerHTML = trendingHtml;
+  }
+}
+
+function changePage(page) {
+  if (page < 1) return;
+  currentPage = page;
+  renderNews();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// ==================== COUNTDOWN TIMER ====================
+function updateCountdownDisplay() {
+  var minutes = Math.floor(countdownSeconds / 60);
+  var seconds = countdownSeconds % 60;
+  var timerDisplay = document.getElementById("countdownTimer");
+  if (timerDisplay) {
+    var minsStr = minutes < 10 ? "0" + minutes : minutes;
+    var secsStr = seconds < 10 ? "0" + seconds : seconds;
+    timerDisplay.innerHTML = "Next update in " + minsStr + ":" + secsStr;
+  }
+}
+
+function startCountdown() {
+  if (refreshInterval) clearInterval(refreshInterval);
+  
+  refreshInterval = setInterval(function() {
+    if (countdownSeconds <= 1) {
+      countdownSeconds = 180;
+      updateCountdownDisplay();
+      if (document.visibilityState === "visible") {
+        loadNews();
+      }
+    } else {
+      countdownSeconds--;
+      updateCountdownDisplay();
+    }
+  }, 1000);
+}
+
+// ==================== NAVIGATION ====================
+function setupNavigation() {
+  var btns = document.querySelectorAll(".nav-btn");
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener("click", function(e) {
+      var allBtns = document.querySelectorAll(".nav-btn");
+      for (var j = 0; j < allBtns.length; j++) {
+        allBtns[j].classList.remove("active");
+      }
+      this.classList.add("active");
+      currentCategory = this.getAttribute("data-cat");
+      currentPage = 1;
+      renderNews();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+  
+  var refreshBtn = document.getElementById("refreshBtn");
+  if (refreshBtn) {
+    refreshBtn.addEventListener("click", function() {
+      countdownSeconds = 180;
+      updateCountdownDisplay();
+      loadNews();
+    });
+  }
+}
+
+// ==================== INITIALIZE ====================
+document.addEventListener("DOMContentLoaded", function() {
+  loadNews();
+  setupNavigation();
+  startCountdown();
+});
+</script>
+</body>
+</html>
