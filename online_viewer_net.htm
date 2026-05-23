@@ -1,0 +1,379 @@
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1808537228726072"
+
+     crossorigin="anonymous"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Typing Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for character highlighting */
+        .char-untyped { color: #64748b; /* slate-500 */ }
+        .char-correct { color: #34d399; /* green-400 */ }
+        .char-incorrect { color: #f87171; /* red-400 */ text-decoration: underline; text-decoration-color: #f87171;}
+        .char-current {
+            background-color: #0369a1; /* sky-700 */
+            color: #f1f5f9; /* slate-100 */
+            border-radius: 2px;
+            padding: 0 1px;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { background-color: #0369a1; /* sky-700 */ }
+            50% { background-color: #075985; /* sky-800 */ }
+        }
+        /* Ensure textarea and sample text have consistent character box sizing */
+        #sample-text-display, #user-input {
+            font-family: 'Courier New', Courier, monospace; /* Monospaced font for typing */
+            letter-spacing: 0.5px; /* Adjust as needed for visual consistency */
+        }
+        body {
+            font-family: 'Inter', sans-serif; /* Default sans-serif for UI elements */
+        }
+        /* Custom scrollbar for sample text if it overflows */
+        #sample-text-display::-webkit-scrollbar {
+            width: 8px;
+        }
+        #sample-text-display::-webkit-scrollbar-track {
+            background: #1e293b; /* slate-800 */
+            border-radius: 10px;
+        }
+        #sample-text-display::-webkit-scrollbar-thumb {
+            background: #38bdf8; /* sky-500 */
+           û border-radius: 10px;
+        }
+        #sample-text-display::-webkit-scrollbar-thumb:hover {
+            background: #0ea5e9; /* sky-600 */
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-900 text-slate-100 flex flex-col items-center justify-center min-h-screen p-4 selection:bg-sky-500 selection:text-white">
+
+    <div id="app-container" class="w-full max-w-3xl bg-slate-800 p-6 md:p-8 rounded-xl shadow-2xl">
+        <h1 class="text-3xl md:text-4xl font-bold text-center text-sky-400 mb-6">Professional Typing Test</h1>
+
+        <div id="stats-container" class="grid grid-cols-3 gap-4 mb-6 p-4 bg-slate-700 rounded-lg text-center">
+            <div>
+                <span class="text-xs sm:text-sm text-slate-400 block">Time Left</span>
+                <p id="timer" class="text-xl sm:text-2xl font-semibold text-sky-300">60s</p>
+            </div>
+            <div>
+                <span class="text-xs sm:text-sm text-slate-400 block">WPM</span>
+                <p id="wpm" class="text-xl sm:text-2xl font-semibold text-green-400">0</p>
+            </div>
+            <div>
+                <span class="text-xs sm:text-sm text-slate-400 block">Accuracy</span>
+                <p id="accuracy" class="text-xl sm:text-2xl font-semibold text-amber-400">0%</p>
+            </div>
+        </div>
+
+        <div id="sample-text-wrapper" class="mb-6 relative">
+             <div id="sample-text-display" class="text-lg md:text-xl leading-relaxed p-4 border border-slate-600 rounded-lg bg-slate-900/50 select-none h-36 overflow-y-auto font-['Courier_Prime',_monospace]">
+                Click "Start Test" to begin.
+            </div>
+        </div>
+
+
+        <textarea id="user-input" rows="3" class="w-full p-3 text-lg bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none resize-none font-['Courier_Prime',_monospace]" placeholder="Start typing here when the test begins..." disabled></textarea>
+
+        <div class="mt-6 flex flex-col sm:flex-row justify-center items-center gap-4">
+            <button id="start-button" class="w-full sm:w-auto bg-sky-500 hover:bg-sky-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-opacity-75">Start Test</button>
+            <button id="reset-button" class="w-full sm:w-auto bg-slate-600 hover:bg-slate-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-opacity-75">New Text</button>
+        </div>
+    </div>
+
+    <div id="results-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300 ease-in-out z-50">
+        <div class="bg-slate-800 p-6 md:p-8 rounded-xl shadow-2xl w-full max-w-md text-center transform scale-95 transition-transform duration-300 ease-in-out">
+            <h2 id="modal-title" class="text-2xl font-bold text-sky-400 mb-4">Test Completed!</h2>
+            <div class="mb-6 space-y-2">
+                <p class="text-lg">Your WPM: <span id="modal-wpm" class="font-semibold text-green-400">0</span></p>
+                <p class="text-lg">Your Accuracy: <span id="modal-accuracy" class="font-semibold text-amber-400">0%</span></p>
+                <p class="text-lg">Correct Characters: <span id="modal-correct-chars" class="font-semibold text-slate-300">0</span></p>
+                <p class="text-lg">Incorrect Characters: <span id="modal-incorrect-chars" class="font-semibold text-slate-300">0</span></p>
+                 <p class="text-lg">Time Taken: <span id="modal-time-taken" class="font-semibold text-slate-300">0s</span></p>
+            </div>
+            <button id="try-again-button" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const sampleTextDisplay = document.getElementById('sample-text-display');
+        const userInput = document.getElementById('user-input');
+        const timerDisplay = document.getElementById('timer');
+        const wpmDisplay = document.getElementById('wpm');
+        const accuracyDisplay = document.getElementById('accuracy');
+        const startButton = document.getElementById('start-button');
+        const resetButton = document.getElementById('reset-button');
+        const resultsModal = document.getElementById('results-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalWpm = document.getElementById('modal-wpm');
+        const modalAccuracy = document.getElementById('modal-accuracy');
+        const modalCorrectChars = document.getElementById('modal-correct-chars');
+        const modalIncorrectChars = document.getElementById('modal-incorrect-chars');
+        const modalTimeTaken = document.getElementById('modal-time-taken');
+        const tryAgainButton = document.getElementById('try-again-button');
+
+        // Paragraphs for the test
+        const paragraphs = [
+            "The quick brown fox jumps over the lazy dog. This classic pangram is often used to test typefaces and keyboard layouts. It contains every letter of the English alphabet, making it a comprehensive tool for practice.",
+            "Technology is rapidly transforming our world. From artificial intelligence to renewable energy, innovations are paving the way for a future that was once the realm of science fiction. Adapting to these changes is key.",
+            "Learning a new skill requires dedication and consistent effort. Whether it's coding, playing a musical instrument, or mastering a new language, the journey is often as rewarding as the destination itself. Embrace challenges.",
+            "The ocean's depths hold mysteries yet to be uncovered. Marine biologists explore its vast ecosystems, discovering new species and understanding the delicate balance of life beneath the waves. Protect our blue planet.",
+            "To achieve great things, two things are needed: a plan, and not quite enough time. This paradoxical wisdom often rings true in creative endeavors and high-stakes projects, pushing individuals to innovate under pressure.",
+            "A journey of a thousand miles begins with a single step. This ancient proverb reminds us that even the most daunting tasks are achievable if broken down into smaller, manageable actions. Start today, no matter how small.",
+            "The art of communication is the language of leadership. Clearly conveying ideas, listening empathetically, and inspiring action are essential qualities for anyone looking to make a positive impact in their community or workplace.",
+            "Reading books opens windows to different worlds and perspectives. It expands our knowledge, enhances our vocabulary, and fosters critical thinking. Make reading a daily habit for lifelong learning and personal growth.",
+            "In the heart of the city, life moves at a relentless pace. Amidst the towering skyscrapers and bustling streets, countless stories unfold every second. Each individual contributes to the vibrant tapestry of urban existence.",
+            "Stargazing on a clear night can be a humbling experience. The sheer scale of the universe, with its billions of galaxies and countless stars, puts our own existence into perspective. It sparks curiosity and wonder about our place in the cosmos."
+        ];
+
+        // Game State
+        let currentParagraph = '';
+        let gameStatus = 'waiting'; // waiting, running, finished
+        let timerInterval;
+        let timeLeft = 60; // Default test duration in seconds
+        const TEST_DURATION = 60;
+        let startTime;
+        let charactersTyped = 0;
+        let correctCharacters = 0;
+        let incorrectCharacters = 0;
+
+
+        // --- Initialization ---
+        function initTest() {
+            resetGameValues();
+            loadNewParagraph();
+            userInput.value = '';
+            userInput.disabled = true; // Disabled until start
+            startButton.disabled = false;
+            startButton.textContent = 'Start Test';
+            resetButton.disabled = false;
+            wpmDisplay.textContent = '0';
+            accuracyDisplay.textContent = '0%';
+            timerDisplay.textContent = `${TEST_DURATION}s`;
+            hideResultsModal();
+        }
+
+        function resetGameValues() {
+            clearInterval(timerInterval);
+            gameStatus = 'waiting';
+            timeLeft = TEST_DURATION;
+            charactersTyped = 0;
+            correctCharacters = 0;
+            incorrectCharacters = 0;
+            startTime = null;
+        }
+
+        function loadNewParagraph() {
+            const randomIndex = Math.floor(Math.random() * paragraphs.length);
+            currentParagraph = paragraphs[randomIndex];
+            sampleTextDisplay.innerHTML = ''; // Clear previous text
+            currentParagraph.split('').forEach(char => {
+                const charSpan = document.createElement('span');
+                charSpan.textContent = char;
+                charSpan.className = 'char-untyped';
+                sampleTextDisplay.appendChild(charSpan);
+            });
+            // Ensure the first character is visible if text overflows
+            if (sampleTextDisplay.firstChild) {
+                sampleTextDisplay.firstChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            userInput.setAttribute('maxlength', currentParagraph.length);
+             // Initial highlight for the first character if a paragraph is loaded
+            if (gameStatus !== 'running' && currentParagraph.length > 0) {
+                highlightCurrentChar(0);
+            }
+        }
+        
+        // --- Game Logic ---
+        function startGame() {
+            if (gameStatus === 'running') return;
+
+            resetGameValues(); // Reset values for a fresh start
+            loadNewParagraph(); // Load a paragraph if one isn't already set or to ensure it's fresh
+            
+            gameStatus = 'running';
+            userInput.disabled = false;
+            userInput.value = ''; // Clear any previous input
+            userInput.focus();
+            
+            startButton.textContent = 'Test Running...';
+            startButton.disabled = true;
+            resetButton.disabled = true; // Disable reset during test
+
+            startTime = new Date();
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // Initial call to highlight the first character
+            processInput(); 
+        }
+
+        function updateTimer() {
+            timeLeft--;
+            timerDisplay.textContent = `${timeLeft}s`;
+            if (timeLeft <= 0) {
+                endGame(false); // Time's up
+            }
+        }
+
+        function processInput() {
+            if (gameStatus !== 'running') return;
+
+            const typedText = userInput.value;
+            const typedLength = typedText.length;
+            charactersTyped = typedLength; // Total characters attempted by user
+
+            let currentCorrect = 0;
+            let currentIncorrect = 0;
+
+            const sampleChars = sampleTextDisplay.children;
+
+            for (let i = 0; i < currentParagraph.length; i++) {
+                const charSpan = sampleChars[i];
+                if (!charSpan) continue;
+
+                if (i < typedLength) { // Character has been typed
+                    if (typedText[i] === currentParagraph[i]) {
+                        charSpan.className = 'char-correct';
+                        currentCorrect++;
+                    } else {
+                        charSpan.className = 'char-incorrect';
+                        currentIncorrect++;
+                    }
+                } else if (i === typedLength) { // Current character to be typed
+                    charSpan.className = 'char-current';
+                     // Auto-scroll to current character
+                    charSpan.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+                } else { // Character not yet typed
+                    charSpan.className = 'char-untyped';
+                }
+            }
+            
+            correctCharacters = currentCorrect; // Update global count based on current input
+            incorrectCharacters = currentIncorrect;
+
+            // Live WPM and Accuracy (optional, can be intensive)
+            // For now, we calculate these at the end.
+
+            // Check if paragraph is completed correctly
+            if (typedLength === currentParagraph.length && currentIncorrect === 0) {
+                 endGame(true); // Finished early and perfectly
+            } else if (typedLength === currentParagraph.length) {
+                // User typed the whole paragraph length, but there might be errors.
+                // The test continues until time is up or they fix errors to make it perfect.
+                // Or, we can choose to end it here if all chars are typed.
+                // For simplicity, let's let the timer run out or they fix it.
+            }
+        }
+        
+        function highlightCurrentChar(index) {
+            const sampleChars = sampleTextDisplay.children;
+            for (let i = 0; i < sampleChars.length; i++) {
+                if (i === index) {
+                    sampleChars[i].className = 'char-current';
+                    sampleChars[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+                } else if (sampleChars[i].classList.contains('char-current')) { // only reset if it was current
+                    sampleChars[i].className = 'char-untyped'; // Or its previous state if known
+                }
+            }
+        }
+
+
+        function endGame(finishedEarly) {
+            clearInterval(timerInterval);
+            gameStatus = 'finished';
+            userInput.disabled = true;
+            startButton.textContent = 'Try Again';
+            startButton.disabled = false;
+            resetButton.disabled = false;
+
+            const endTime = new Date();
+            let timeTakenSeconds;
+
+            if (finishedEarly) {
+                timeTakenSeconds = (endTime - startTime) / 1000;
+            } else {
+                timeTakenSeconds = TEST_DURATION; // Full duration if timer ran out
+            }
+            
+            // Recalculate correct/incorrect based on final input
+            const finalTypedText = userInput.value;
+            correctCharacters = 0;
+            for(let i=0; i < finalTypedText.length; i++) {
+                if (finalTypedText[i] === currentParagraph[i]) {
+                    correctCharacters++;
+                }
+            }
+            charactersTyped = finalTypedText.length;
+            incorrectCharacters = charactersTyped - correctCharacters;
+
+
+            const grossWPM = charactersTyped > 0 ? Math.round((charactersTyped / 5) / (timeTakenSeconds / 60)) : 0;
+            // Net WPM considers only correct characters
+            const netWPM = correctCharacters > 0 ? Math.round((correctCharacters / 5) / (timeTakenSeconds / 60)) : 0;
+            const accuracy = charactersTyped > 0 ? Math.round((correctCharacters / charactersTyped) * 100) : 0;
+
+            wpmDisplay.textContent = netWPM;
+            accuracyDisplay.textContent = `${accuracy}%`;
+
+            showResultsModal(netWPM, accuracy, correctCharacters, incorrectCharacters, timeTakenSeconds);
+        }
+
+        // --- UI Updates ---
+        function showResultsModal(wpm, acc, correct, incorrect, timeTaken) {
+            modalWpm.textContent = wpm;
+            modalAccuracy.textContent = `${acc}%`;
+            modalCorrectChars.textContent = correct;
+            modalIncorrectChars.textContent = incorrect;
+            modalTimeTaken.textContent = `${Math.round(timeTaken)}s`;
+            
+            resultsModal.classList.remove('hidden');
+            setTimeout(() => { // Timeout for transition effect
+                resultsModal.classList.remove('opacity-0');
+                resultsModal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+        }
+
+        function hideResultsModal() {
+            resultsModal.classList.add('opacity-0');
+            resultsModal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                resultsModal.classList.add('hidden');
+            }, 300); // Match transition duration
+        }
+
+        // --- Event Listeners ---
+        startButton.addEventListener('click', () => {
+            if (gameStatus === 'finished' || gameStatus === 'waiting') {
+                initTest(); // Reset everything for a new test
+                startGame();
+            }
+        });
+
+        resetButton.addEventListener('click', () => {
+            initTest(); // Load new text and reset state
+            // Optionally, keep the placeholder text until start is clicked again
+            sampleTextDisplay.innerHTML = '<span class="char-untyped">Click "Start Test" to begin.</span>';
+            highlightCurrentChar(-1); // Remove current char highlight
+        });
+        
+        userInput.addEventListener('input', processInput);
+
+        tryAgainButton.addEventListener('click', () => {
+            hideResultsModal();
+            initTest(); // Prepare for a new test
+            startGame(); // And start it immediately
+        });
+
+        // Initialize the test on page load
+        document.addEventListener('DOMContentLoaded', initTest);
+
+    </script>
+</body>
+</html>
